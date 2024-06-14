@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catálogo de Livros</title>
+    <link rel="stylesheet" href="App.css">
+    <style>
+       /* Estilos para a tabela */
+table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #201f1f;
+  }
+  
+  /* Estilo para as linhas da tabela */
+  tr:nth-child(even) {
+    background-color: #1a1919;
+  }
+  
+  /* Estilo para o cabeçalho da tabela */
+  th {
+    background-color: #282c34;
+    color: rgb(4, 64, 143);
+  }
+  
+  /* Estilo para os resultados da tabela */
+  .resultado {
+    background-color: rgb(89, 89, 158);
+    color: rgb(121, 120, 120);
+    text-align: center;
+  }
+  
+  
+  /* Estilos para a tabela */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #063d79; /* Contorno da tabela */
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Estilo para as linhas da tabela */
+  tr:nth-child(even) {
+    background-color: #dddcdc;
+  }
+  
+  /* Estilo para o cabeçalho da tabela */
+  th {
+    background-color: #0e4b8d; 
+    color: rgb(227, 227, 228);
+  }
+  
+  /* Estilo para os resultados da tabela */
+  .resultado {
+    background-color: #0787ff; 
+    color: black; 
+    text-align: center;
+  }
+  
+  /* Estilo para os números das páginas */
+  .botao-paginacao {
+    background-color: #286aa7; 
+    color: rgba(248, 248, 247, 0.897);
+  }
+  
+  /* Estilo para o texto do título */
+  h1 {
+    color: #dc3545; 
+    text-align: center;
+  }
+  
+  
+  /* Estilos para a tabela */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    border: 2px solid #007bff; /* Contorno da tabela */
+  }
+  
+  th, td {
+    padding: 8px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  /* Estilo para as linhas da tabela */
+  tr:nth-child(even) {
+    background-color: #f2f2f2;
+  }
+  
+  /* Estilo para o cabeçalho da tabela */
+  th {
+    background-color: #007bff; 
+    color: white;
+  }
+  
+  /* Estilo para os resultados da tabela */
+  .resultado {
+    background-color: #757573; 
+    color: black; /* Texto preto */
+    text-align: center;
+  }
+  
+  /* Estilo para os números das páginas */
+  .botao-paginacao {
+    
+    background-color: #5e5f5f; 
+    color: white;
+    display: inline-block; /* Para centralizar os botões */
+  }
+  
+  /* Estilo para o texto do título */
+  h1 {
+    color: #dc3545; 
+    text-align: center;
+    font-size: 48px; /* Aumenta o tamanho do texto */
+    font-family: 'arial black', cursive; /* Altera a fonte  */
+    font-weight: bold; /* Coloca o texto em negrito */
+  }
+  
+  /* Estilo para a página total */
+  .App-paginacao {
+    background-color: #f4f7fa; 
+    text-align: center;
+  }
+
+    </style>
+</head>
+<body>
+    <h1>Catálogo de livros</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>Título</th>
+                <th>Autor</th>
+                <th>ISBN</th>
+                <th>Páginas</th>
+                <th>Ano</th>
+                <th>Valor</th>
+            </tr>
+        </thead>
+        <tbody id="livros-tbody"></tbody>
+    </table>
+    <div class="pagination" id="pagination"></div>
+    
+    <script>
+        async function fetchLivros(page = 1) {
+            const response = await fetch(`/api/livros?page=${page}&limit=10`);
+            const data = await response.json();
+            const tbody = document.getElementById('livros-tbody');
+            tbody.innerHTML = '';
+
+            data.livros.forEach(livro => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${livro.titulo}</td>
+                    <td>${livro.autor}</td>
+                    <td>${livro.isbn}</td>
+                    <td>${livro.paginas}</td>
+                    <td>${livro.ano}</td>
+                    <td>R$ ${livro.valor.toFixed(2)}</td>
+                `;
+                tbody.appendChild(row);
+            });
+
+            const pagination = document.getElementById('pagination');
+            pagination.innerHTML = '';
+
+            for (let i = 1; i <= data.pages; i++) {
+                const button = document.createElement('button');
+                button.textContent = i;
+                button.classList.add('botao-paginacao');
+                if (i === data.page) {
+                    button.classList.add('active');
+                }
+                button.addEventListener('click', () => fetchLivros(i));
+                pagination.appendChild(button);
+            }
+        }
+
+        fetchLivros();
+    </script>
+</body>
+</html>
