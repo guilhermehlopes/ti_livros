@@ -76,7 +76,7 @@ ti_inventario/
 
 
 ## Comentarios
-Falta os ajustes do botão:/
+Falta finalizar os ajustes do botão
 
 ![](./tela.png)
 
